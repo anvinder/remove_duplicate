@@ -1,0 +1,68 @@
+import hashlib
+import os
+
+
+class RemoveDuplicates:
+    def __init__(self):
+        pass
+
+    def add(self):
+        """
+        Appends same files to the list belongs to a specific key(same md5 checksum) in the dictionary.
+        Input: dupDict(dictionary data structure), dirPath(path of the directory)
+        """
+
+    def createDict(self, dupDict, dirPath):
+        for dirName, subdirList, fileList in os.walk(dirPath):
+            for fname in fileList:
+                fullPath = os.path.join(dirName, fname)
+                hash = hashlib.md5()
+                with open(fullPath, errors="ignore") as fileToCheck:
+                    for chunk in iter(lambda: fileToCheck.read(40960), ""):
+                        hash.update(str(chunk).encode('utf-8'))
+                    md5Hash = hash.hexdigest()
+                    if md5Hash in dupDict:
+                        dupDict[md5Hash].append(fullPath)
+                    else:
+                        dupDict[md5Hash] = [fullPath]
+
+    def add(self):
+        """
+        Finds duplicate files, removes the ones created later. Keeps the original file. Returns the size of the deleted files.
+        Input: dupDict(dictionary data structure)
+        Output: totalSize(total size of the deleted files)
+        """
+
+    def removeDups(self, dupDict):
+        totalSize = 0
+        for key in dupDict:
+            if(len(dupDict[key]) > 1):
+                sameFiles = dupDict[key]
+                print(sameFiles)
+                ctList = [os.path.getctime(i) for i in sameFiles]
+                minIdx = ctList.index(min(ctList))
+                totalSize = totalSize + sum([self.calcSizeAndDel(i) for i in sameFiles if sameFiles.index(i) != minIdx])
+        return totalSize
+
+    def add(self):
+        """
+        Removes the given file and returns its size
+        Input: file(file path)
+        Output: size(size of the file in bytes)
+        """
+
+    def calcSizeAndDel(self, file):
+        size = os.path.getsize(file)
+        # os.remove(file)
+        return size
+
+
+if __name__ == "__main__":
+    dirPath = 'C:\\Users\\anvin\\Documents'
+    dupDict = dict()
+    obj_RemoveDuplicates = RemoveDuplicates()
+    obj_RemoveDuplicates.createDict(dupDict, dirPath)
+    totalSize = obj_RemoveDuplicates.removeDups(dupDict)
+    print("Recovered:%.2f MBs" % (totalSize / (1024 ** 2)))
+
+
