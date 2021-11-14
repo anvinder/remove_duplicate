@@ -6,12 +6,6 @@ class RemoveDuplicates:
     def __init__(self):
         pass
 
-    def add(self):
-        """
-        Appends same files to the list belongs to a specific key(same md5 checksum) in the dictionary.
-        Input: dupDict(dictionary data structure), dirPath(path of the directory)
-        """
-
     def createDict(self, dupDict, dirPath):
         for dirName, subdirList, fileList in os.walk(dirPath):
             for fname in fileList:
@@ -26,13 +20,6 @@ class RemoveDuplicates:
                     else:
                         dupDict[md5Hash] = [fullPath]
 
-    def add(self):
-        """
-        Finds duplicate files, removes the ones created later. Keeps the original file. Returns the size of the deleted files.
-        Input: dupDict(dictionary data structure)
-        Output: totalSize(total size of the deleted files)
-        """
-
     def removeDups(self, dupDict):
         totalSize = 0
         for key in dupDict:
@@ -43,13 +30,6 @@ class RemoveDuplicates:
                 minIdx = ctList.index(min(ctList))
                 totalSize = totalSize + sum([self.calcSizeAndDel(i) for i in sameFiles if sameFiles.index(i) != minIdx])
         return totalSize
-
-    def add(self):
-        """
-        Removes the given file and returns its size
-        Input: file(file path)
-        Output: size(size of the file in bytes)
-        """
 
     def calcSizeAndDel(self, file):
         size = os.path.getsize(file)
