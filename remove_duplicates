@@ -44,5 +44,3 @@ if __name__ == "__main__":
     obj_RemoveDuplicates.createDict(dupDict, dirPath)
     totalSize = obj_RemoveDuplicates.removeDups(dupDict)
     print("Recovered:%.2f MBs" % (totalSize / (1024 ** 2)))
-
-
