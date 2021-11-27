@@ -1,9 +1,10 @@
 import hashlib
 import os
-
+import json
 
 class RemoveDuplicates:
     def __init__(self):
+        self.write_file = open("duplicate_file_list_and_size.txt", "w+", errors='ignore', encoding='utf-8')
         pass
 
     def createDict(self, dupDict, dirPath):
@@ -25,10 +26,16 @@ class RemoveDuplicates:
         for key in dupDict:
             if(len(dupDict[key]) > 1):
                 sameFiles = dupDict[key]
-                print(sameFiles)
                 ctList = [os.path.getctime(i) for i in sameFiles]
                 minIdx = ctList.index(min(ctList))
+                file_size = os.path.getsize(sameFiles[1])
+                file_size = (file_size / (1024 ** 2))
                 totalSize = totalSize + sum([self.calcSizeAndDel(i) for i in sameFiles if sameFiles.index(i) != minIdx])
+                sameFiles = sameFiles + [str(round(file_size, 3)) + "MB"]
+                jsonString = json.dumps(sameFiles)
+                self.write_file.writelines([jsonString, '\n'])
+        self.write_file.writelines(["\nTotal Duplicate File size:%.2f MBs" % (totalSize / (1024 ** 2))])
+        # print("\nTotal Duplicate File size:%.2f MBs" % (totalSize / (1024 ** 2)))
         return totalSize
 
     def calcSizeAndDel(self, file):
@@ -38,10 +45,10 @@ class RemoveDuplicates:
 
 
 if __name__ == "__main__":
-    dirPath = 'C:\\Users\\anvin\\Documents'
+    dirPath = 'C:\\Users\\anvin\\Downloads'
     dupDict = dict()
     obj_RemoveDuplicates = RemoveDuplicates()
     obj_RemoveDuplicates.createDict(dupDict, dirPath)
     totalSize = obj_RemoveDuplicates.removeDups(dupDict)
-    print("Recovered:%.2f MBs" % (totalSize / (1024 ** 2)))
-    
+
+
