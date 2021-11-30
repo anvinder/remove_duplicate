@@ -51,3 +51,4 @@ if __name__ == "__main__":
     obj_RemoveDuplicates.createDict(dupDict, dirPath)
     totalSize = obj_RemoveDuplicates.removeDups(dupDict)
     
+    
